@@ -30,14 +30,18 @@ public class Concierto {
     }
 
     /* Agrega una zona nueva al concierto creando el objeto internamente.*/
-    public boolean agregarZona(String nombreDeLaNuevaZona) {
-        for (Zona zonaExistente : listaDeZonas) {
-            if (zonaExistente.getNombre().equalsIgnoreCase(nombreDeLaNuevaZona)) {
-                return false; // Evita nombres duplicados
+   public boolean agregarZona(String nombreDeLaNuevaZona) throws Exception {
+        try {
+            for (Zona zonaExistente : listaDeZonas) {
+                if (zonaExistente.getNombre().equalsIgnoreCase(nombreDeLaNuevaZona)) {
+                    throw new Exception("La zona '" + nombreDeLaNuevaZona + "' ya existe.");
+                }
             }
+            listaDeZonas.add(new Zona(nombreDeLaNuevaZona, 0, 0));
+            return true;
+        } catch (Exception e) {
+            throw e;
         }
-        listaDeZonas.add(new Zona(nombreDeLaNuevaZona, 0, 0));
-        return true;
     }
 
     /* Agrega un objeto Zona ya configurado a la lista del concierto.*/
@@ -59,11 +63,16 @@ public class Concierto {
     }
 
     /* Busca y retorna una zona específica por su nombre.  */
-    public Zona buscarZona(String nombreDeZonaABuscar) {
-        return listaDeZonas.stream()
+public Zona buscarZona(String nombreDeZonaABuscar) throws Exception {
+        Zona zonaEncontrada = listaDeZonas.stream()
                 .filter(zonaCualquiera -> zonaCualquiera.getNombre().equalsIgnoreCase(nombreDeZonaABuscar))
                 .findFirst()
                 .orElse(null);
+        
+        if (zonaEncontrada == null) {
+            throw new Exception("La zona buscada no existe en el concierto.");
+        }
+        return zonaEncontrada;
     }
 
     // --- Getters y Setters ---

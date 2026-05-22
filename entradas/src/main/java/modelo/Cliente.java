@@ -11,6 +11,7 @@ package modelo;
 
 import java.util.ArrayList;
 import java.util.List;
+import excepciones.UsuarioExcepcion;
 
 public class Cliente extends Persona {
 
@@ -32,8 +33,15 @@ public class Cliente extends Persona {
         this.ventas = new ArrayList<>();
     }
 
-    public boolean ingresar(String usuario, String clave) {
-        return this.getDni().equals(usuario) && this.getContrasena().equals(clave);
+    public boolean ingresar(String usuario, String clave) throws UsuarioExcepcion {
+        if (this.getDni() == null || this.getContrasena() == null) {
+            throw new UsuarioExcepcion("Credenciales no configuradas.");
+        }
+        if (this.getDni().equals(usuario) && this.getContrasena().equals(clave)) {
+            return true;
+        } else {
+            throw new UsuarioExcepcion("DNI o contraseña incorrectos.");
+        }
     }
 
     @Override

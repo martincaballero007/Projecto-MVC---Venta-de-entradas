@@ -10,6 +10,7 @@ package modelo;
  */
 import java.util.ArrayList;
 import java.util.List;
+import excepciones.VentaExcepcion;
 
 public class Zona {
 
@@ -45,25 +46,15 @@ public class Zona {
     }
 
 /* Retornar entradas disponibles */
-    public Entrada[] mostrarEntrada() {
-        return entradas.stream()
-                
-                .filter(entradaActual -> "DISPONIBLE".equalsIgnoreCase(entradaActual.getEstado()))
-                .toArray(Entrada[]::new);
-    }
-
-    /* Venta de entradas (máximo 4 por venta) */
-    public Entrada[] venderEntrada(int cantidadASolicitar) {
+public Entrada[] venderEntrada(int cantidadASolicitar) throws VentaExcepcion {
         if (cantidadASolicitar < 1 || cantidadASolicitar > 4) {
-            return new Entrada[0];
+            throw new VentaExcepcion("Error: Solo se permite comprar entre 1 y 4 entradas.");
         }
 
         List<Entrada> listaTemporalDeDisponibles = new ArrayList<>();
-        
         for (Entrada entradaIndividual : entradas) {
             if ("DISPONIBLE".equalsIgnoreCase(entradaIndividual.getEstado())) {
                 listaTemporalDeDisponibles.add(entradaIndividual);
-                
                 if (listaTemporalDeDisponibles.size() == cantidadASolicitar) {
                     break;
                 }
@@ -71,7 +62,7 @@ public class Zona {
         }
 
         if (listaTemporalDeDisponibles.size() < cantidadASolicitar) {
-            return new Entrada[0];
+            throw new VentaExcepcion("Error: Stock insuficiente en la zona " + this.nombre + ". Quedan " + getCapacidadDisponible() + " entradas.");
         }
 
         for (Entrada entradaSeleccionada : listaTemporalDeDisponibles) {

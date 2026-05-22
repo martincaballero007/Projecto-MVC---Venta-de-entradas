@@ -7,6 +7,7 @@ package modelo;
 import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
+import excepciones.VentaExcepcion;
 
 /**
  *
@@ -45,7 +46,7 @@ public class Venta {
             return false;
         }
         for (int i = 0; i < entradas.size(); i++) {
-            Entrada e = entradas.get(i); // Aquí creas manualmente el "e" usando la posición i
+            Entrada e = entradas.get(i); 
             e.liberar();
         }
         
@@ -54,20 +55,18 @@ public class Venta {
     }
 
     /*Validar venta 1 y 4 entradas    */
-   public boolean esValida() {
-    
-    if (entradas == null) {
-        return false;
+    public boolean esValida() {
+        if (entradas == null) return false;
+        int cantidad = entradas.size();
+        return cantidad >= 1 && cantidad <= 4;
     }
 
-    int cantidad = entradas.size();
-
-    
-    boolean tieneMinimo = cantidad >= 1;
-    boolean tieneMaximo = cantidad <= 4;
-
-    return tieneMinimo && tieneMaximo;
-}
+    public void agregarEntrada(Entrada entrada) throws VentaExcepcion {
+        if (this.entradas.size() >= 4) {
+            throw new VentaExcepcion("Violación de restricción: Máximo 4 entradas por venta.");
+        }
+        this.entradas.add(entrada);
+    }
 
     // Getters y Setters
     public Date getFecha() {
