@@ -101,12 +101,6 @@ public class Venta {
         this.entradas = entradas;
     }
 
-    public void agregarEntrada(Entrada entrada) {
-        if (this.entradas.size() < 4) {
-            this.entradas.add(entrada);
-        }
-    }
-
     public Tarjeta getTarjeta() {
         return tarjeta;
     }
