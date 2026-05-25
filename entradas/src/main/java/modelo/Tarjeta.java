@@ -1,16 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package modelo;
 
-/**
- *
- * @author odiol
- */
 public class Tarjeta {
 
-    private int numero;
+    private long numero;   // long para soportar los 16 dígitos de tarjetas reales
     private String nombre;
     private String fecha;
     private int cvv;
@@ -18,7 +10,7 @@ public class Tarjeta {
     public Tarjeta() {
     }
 
-    public Tarjeta(int numero, String nombre, String fecha, int cvv) {
+    public Tarjeta(long numero, String nombre, String fecha, int cvv) {
         this.numero = numero;
         this.nombre = nombre;
         this.fecha = fecha;
@@ -30,11 +22,11 @@ public class Tarjeta {
     }
 
     // Getters y Setters
-    public int getNumero() {
+    public long getNumero() {
         return numero;
     }
 
-    public void setNumero(int numero) {
+    public void setNumero(long numero) {
         this.numero = numero;
     }
 

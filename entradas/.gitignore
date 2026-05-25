@@ -11,3 +11,7 @@ build/
 # Temporales del sistema
 Thumbs.db
 .DS_Store
+
+# Temporales de NetBeans/editor
+*.java~
+.LCK*

@@ -1,13 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package modelo;
 
-/**
- *
- * @author odiol
- */
 public abstract class Persona {
 
     private String nombres;
@@ -25,52 +17,22 @@ public abstract class Persona {
         this.contrasena = contrasena;
     }
 
-    public boolean registrarTarjeta() {
-        return false;
-    }
-
-    public boolean eliminarTarjeta() {
-        return false;
-    }
-
-    public boolean anularVenta() {
-        return false;
-    }
-
-    public boolean comprar() {
-        return false;
-    }
+    // Métodos abstractos: cada subclase define su propio comportamiento
+    public abstract boolean registrarTarjeta();
+    public abstract boolean eliminarTarjeta();
+    public abstract boolean anularVenta();
+    public abstract boolean comprar();
 
     // Getters y Setters
-    public String getNombres() {
-        return nombres;
-    }
+    public String getNombres() { return nombres; }
+    public void setNombres(String nombres) { this.nombres = nombres; }
 
-    public void setNombres(String nombres) {
-        this.nombres = nombres;
-    }
+    public String getApellidos() { return apellidos; }
+    public void setApellidos(String apellidos) { this.apellidos = apellidos; }
 
-    public String getApellidos() {
-        return apellidos;
-    }
+    public String getDni() { return dni; }
+    public void setDni(String dni) { this.dni = dni; }
 
-    public void setApellidos(String apellidos) {
-        this.apellidos = apellidos;
-    }
-
-    public String getDni() {
-        return dni;
-    }
-
-    public void setDni(String dni) {
-        this.dni = dni;
-    }
-
-    public String getContrasena() {
-        return contrasena;
-    }
-
-    public void setContrasena(String contrasena) {
-        this.contrasena = contrasena;
-    }
+    public String getContrasena() { return contrasena; }
+    public void setContrasena(String contrasena) { this.contrasena = contrasena; }
 }

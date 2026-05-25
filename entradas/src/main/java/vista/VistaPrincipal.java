@@ -22,7 +22,7 @@ public class VistaPrincipal {
             System.out.println("1. Comprar Entradas");
             System.out.println("2. Salir");
             System.out.print("Seleccione una opción: ");
-            
+
             String opcion = scanner.nextLine();
 
             switch (opcion) {
@@ -48,18 +48,27 @@ public class VistaPrincipal {
             System.out.print("Ingrese la cantidad de entradas (Máximo 4): ");
             int cantidad = Integer.parseInt(scanner.nextLine());
 
-            System.out.print("Ingrese el número de su tarjeta: ");
-            int numTarjeta = Integer.parseInt(scanner.nextLine());
-            
-            
-            Tarjeta tarjetaCliente = new Tarjeta(numTarjeta, "Titular", "12/28", 123);
-            
+            // Datos completos de la tarjeta
+            System.out.print("Ingrese el número de su tarjeta (16 dígitos): ");
+            long numTarjeta = Long.parseLong(scanner.nextLine());
+
+            System.out.print("Ingrese el nombre del titular: ");
+            String titular = scanner.nextLine();
+
+            System.out.print("Ingrese la fecha de vencimiento (MM/AA): ");
+            String vencimiento = scanner.nextLine();
+
+            System.out.print("Ingrese el CVV (3 dígitos): ");
+            int cvv = Integer.parseInt(scanner.nextLine());
+
+            Tarjeta tarjetaCliente = new Tarjeta(numTarjeta, titular, vencimiento, cvv);
+
             Venta ventaRealizada = controlador.procesarCompra(nombreZona, cantidad, tarjetaCliente);
-            
+
             System.out.println("\n¡COMPRA EXITOSA!");
             System.out.println("Monto total pagado: $" + ventaRealizada.getMonto());
             System.out.println("Fecha de compra: " + ventaRealizada.getFecha().toString());
-            
+
         } catch (NumberFormatException nfe) {
             System.err.println("Error: Debe ingresar un valor numérico válido.");
         } catch (VentaExcepcion ve) {

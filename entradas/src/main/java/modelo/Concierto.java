@@ -1,15 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package modelo;
 
-/**
- *
- * @author odiol
- */
 import java.util.ArrayList;
 import java.util.List;
+import excepciones.VentaExcepcion;
 
 public class Concierto {
 
@@ -29,22 +22,18 @@ public class Concierto {
         this.listaDeZonas = new ArrayList<>();
     }
 
-    /* Agrega una zona nueva al concierto creando el objeto internamente.*/
-   public boolean agregarZona(String nombreDeLaNuevaZona) throws Exception {
-        try {
-            for (Zona zonaExistente : listaDeZonas) {
-                if (zonaExistente.getNombre().equalsIgnoreCase(nombreDeLaNuevaZona)) {
-                    throw new Exception("La zona '" + nombreDeLaNuevaZona + "' ya existe.");
-                }
+    /* Agrega una zona nueva al concierto creando el objeto internamente. */
+    public boolean agregarZona(String nombreDeLaNuevaZona) throws VentaExcepcion {
+        for (Zona zonaExistente : listaDeZonas) {
+            if (zonaExistente.getNombre().equalsIgnoreCase(nombreDeLaNuevaZona)) {
+                throw new VentaExcepcion("La zona '" + nombreDeLaNuevaZona + "' ya existe.");
             }
-            listaDeZonas.add(new Zona(nombreDeLaNuevaZona, 0, 0));
-            return true;
-        } catch (Exception e) {
-            throw e;
         }
+        listaDeZonas.add(new Zona(nombreDeLaNuevaZona, 0, 0));
+        return true;
     }
 
-    /* Agrega un objeto Zona ya configurado a la lista del concierto.*/
+    /* Agrega un objeto Zona ya configurado a la lista del concierto. */
     public boolean agregarZona(Zona zonaParaAgregar) {
         for (Zona zonaEnLista : listaDeZonas) {
             if (zonaEnLista.getNombre().equalsIgnoreCase(zonaParaAgregar.getNombre())) {
@@ -55,49 +44,28 @@ public class Concierto {
         return true;
     }
 
-    /*Elimina una zona de la lista basándose en su nombre.*/
+    /* Elimina una zona de la lista basándose en su nombre. */
     public boolean eliminarZona(String nombreDeZonaAEliminar) {
-        return listaDeZonas.removeIf(zonaActual -> 
+        return listaDeZonas.removeIf(zonaActual ->
             zonaActual.getNombre().equalsIgnoreCase(nombreDeZonaAEliminar)
         );
     }
 
-    /* Busca y retorna una zona específica por su nombre.  */
-public Zona buscarZona(String nombreDeZonaABuscar) throws Exception {
-        Zona zonaEncontrada = listaDeZonas.stream()
-                .filter(zonaCualquiera -> zonaCualquiera.getNombre().equalsIgnoreCase(nombreDeZonaABuscar))
+    /* Busca y retorna una zona específica por su nombre. */
+    public Zona buscarZona(String nombreDeZonaABuscar) throws VentaExcepcion {
+        return listaDeZonas.stream()
+                .filter(z -> z.getNombre().equalsIgnoreCase(nombreDeZonaABuscar))
                 .findFirst()
-                .orElse(null);
-        
-        if (zonaEncontrada == null) {
-            throw new Exception("La zona buscada no existe en el concierto.");
-        }
-        return zonaEncontrada;
+                .orElseThrow(() -> new VentaExcepcion("La zona '" + nombreDeZonaABuscar + "' no existe en el concierto."));
     }
 
     // --- Getters y Setters ---
+    public String getNombre() { return nombre; }
+    public void setNombre(String nombre) { this.nombre = nombre; }
 
-    public String getNombre() {
-        return nombre;
-    }
+    public String getFecha() { return fecha; }
+    public void setFecha(String fecha) { this.fecha = fecha; }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(String fecha) {
-        this.fecha = fecha;
-    }
-
-    public List<Zona> getZonas() {
-        return listaDeZonas;
-    }
-
-    public void setZonas(List<Zona> listaDeZonas) {
-        this.listaDeZonas = listaDeZonas;
-    }
+    public List<Zona> getZonas() { return listaDeZonas; }
+    public void setZonas(List<Zona> listaDeZonas) { this.listaDeZonas = listaDeZonas; }
 }
