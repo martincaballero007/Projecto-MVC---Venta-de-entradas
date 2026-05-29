@@ -13,6 +13,7 @@ public class ConciertoControlador {
     private Concierto conciertoActual;
     private Cliente clienteSesion;
 
+    // Constructor original: Recibe el modelo puro
     public ConciertoControlador(Concierto concierto) {
         this.conciertoActual = concierto;
     }
@@ -31,7 +32,6 @@ public class ConciertoControlador {
             }
 
             Zona zona = conciertoActual.buscarZona(nombreZona);
-
             Entrada[] entradasCompradas = zona.venderEntrada(cantidad);
             
             int montoTotal = zona.getPrecio() * cantidad;

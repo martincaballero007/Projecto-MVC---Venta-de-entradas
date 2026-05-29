@@ -1,80 +1,141 @@
 package vista;
 
-import controlador.ConciertoControlador;
-import modelo.Tarjeta;
-import modelo.Venta;
-import excepciones.VentaExcepcion;
-import java.util.Scanner;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
+import java.awt.event.ActionListener;
 
-public class VistaPrincipal {
-    private ConciertoControlador controlador;
-    private Scanner scanner;
+public class VistaPrincipal extends JFrame {
 
-    public VistaPrincipal(ConciertoControlador controlador) {
-        this.controlador = controlador;
-        this.scanner = new Scanner(System.in);
+    private JComboBox<String> comboZonas;
+    private JTextField txtCantidad;
+    private JTextField txtNumTarjeta;
+    private JTextField txtTitular;
+    private JTextField txtVencimiento;
+    private JPasswordField txtCvv; 
+    
+    private JButton btnComprar;
+    private JButton btnSalir;
+
+    public VistaPrincipal() {
+        super("Sistema de Venta de Entradas");
+        configurarLookAndFeel();
+        inicializarComponentes();
     }
 
-    public void iniciar() {
-        boolean salir = false;
-        while (!salir) {
-            System.out.println("\n--- SISTEMA DE VENTA DE ENTRADAS ---");
-            System.out.println("1. Comprar Entradas");
-            System.out.println("2. Salir");
-            System.out.print("Seleccione una opción: ");
-
-            String opcion = scanner.nextLine();
-
-            switch (opcion) {
-                case "1":
-                    mostrarMenuCompra();
-                    break;
-                case "2":
-                    salir = true;
-                    System.out.println("Saliendo del sistema...");
-                    break;
-                default:
-                    System.out.println("Opción inválida.");
-            }
-        }
-    }
-
-    private void mostrarMenuCompra() {
+    private void configurarLookAndFeel() {
         try {
-            System.out.println("\n--- COMPRA DE ENTRADAS ---");
-            System.out.print("Ingrese el nombre de la Zona (ej. VIP, General): ");
-            String nombreZona = scanner.nextLine();
-
-            System.out.print("Ingrese la cantidad de entradas (Máximo 4): ");
-            int cantidad = Integer.parseInt(scanner.nextLine());
-
-            // Datos completos de la tarjeta
-            System.out.print("Ingrese el número de su tarjeta (16 dígitos): ");
-            long numTarjeta = Long.parseLong(scanner.nextLine());
-
-            System.out.print("Ingrese el nombre del titular: ");
-            String titular = scanner.nextLine();
-
-            System.out.print("Ingrese la fecha de vencimiento (MM/AA): ");
-            String vencimiento = scanner.nextLine();
-
-            System.out.print("Ingrese el CVV (3 dígitos): ");
-            int cvv = Integer.parseInt(scanner.nextLine());
-
-            Tarjeta tarjetaCliente = new Tarjeta(numTarjeta, titular, vencimiento, cvv);
-
-            Venta ventaRealizada = controlador.procesarCompra(nombreZona, cantidad, tarjetaCliente);
-
-            System.out.println("\n¡COMPRA EXITOSA!");
-            System.out.println("Monto total pagado: $" + ventaRealizada.getMonto());
-            System.out.println("Fecha de compra: " + ventaRealizada.getFecha().toString());
-
-        } catch (NumberFormatException nfe) {
-            System.err.println("Error: Debe ingresar un valor numérico válido.");
-        } catch (VentaExcepcion ve) {
-            System.err.println("Error en la compra: " + ve.getMessage());
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
-            System.err.println("Ha ocurrido un error inesperado: " + e.getMessage());
+            System.err.println("No se pudo establecer el Look and Feel del sistema: " + e.getMessage());
         }
+    }
+
+    private void inicializarComponentes() {
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setSize(480, 380);
+        this.setLocationRelativeTo(null); 
+        
+        JPanel panelPrincipal = new JPanel(new BorderLayout(10, 10));
+        panelPrincipal.setBorder(new EmptyBorder(15, 15, 15, 15));
+        
+        JLabel lblTitulo = new JLabel("COMPRA DE ENTRADAS", JLabel.CENTER);
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 16));
+        panelPrincipal.add(lblTitulo, BorderLayout.NORTH);
+
+        JPanel panelFormulario = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(6, 6, 6, 6); 
+
+        comboZonas = new JComboBox<>(new String[]{"VIP", "General", "Preferencial"}); 
+        txtCantidad = new JTextField();
+        txtNumTarjeta = new JTextField();
+        txtTitular = new JTextField();
+        txtVencimiento = new JTextField();
+        txtCvv = new JPasswordField();
+
+        colocarComponente(panelFormulario, new JLabel("Zona del Concierto:"), comboZonas, gbc, 0);
+        colocarComponente(panelFormulario, new JLabel("Cantidad (Máx. 4):"), txtCantidad, gbc, 1);
+        colocarComponente(panelFormulario, new JLabel("Número de Tarjeta (16 dígitos):"), txtNumTarjeta, gbc, 2);
+        colocarComponente(panelFormulario, new JLabel("Nombre del Titular:"), txtTitular, gbc, 3);
+        colocarComponente(panelFormulario, new JLabel("Vencimiento (MM/AA):"), txtVencimiento, gbc, 4);
+        colocarComponente(panelFormulario, new JLabel("CVV (3 dígitos):"), txtCvv, gbc, 5);
+
+        panelPrincipal.add(panelFormulario, BorderLayout.CENTER);
+
+        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
+        btnComprar = new JButton("Comprar Entradas");
+        btnSalir = new JButton("Salir");
+        
+        btnComprar.setPreferredSize(new Dimension(140, 30));
+        btnSalir.setPreferredSize(new Dimension(90, 30));
+
+        panelBotones.add(btnComprar);
+        panelBotones.add(btnSalir);
+        panelPrincipal.add(panelBotones, BorderLayout.SOUTH);
+
+        this.add(panelPrincipal);
+    }
+
+    private void colocarComponente(JPanel panel, JLabel label, JComponent componente, GridBagConstraints gbc, int fila) {
+        gbc.gridy = fila;
+        gbc.gridx = 0;
+        gbc.weightx = 0.3;
+        panel.add(label, gbc);
+        
+        gbc.gridx = 1;
+        gbc.weightx = 0.7;
+        panel.add(componente, gbc);
+    }
+
+    // Métodos de interacción expuestos al controlador
+    public void addComprarListener(ActionListener listener) {
+        btnComprar.addActionListener(listener);
+    }
+
+    public void addSalirListener(ActionListener listener) {
+        btnSalir.addActionListener(listener);
+    }
+
+    public String getNombreZona() {
+        return (String) comboZonas.getSelectedItem();
+    }
+
+    public String getCantidadInput() {
+        return txtCantidad.getText().trim();
+    }
+
+    public String getNumTarjetaInput() {
+        return txtNumTarjeta.getText().trim();
+    }
+
+    public String getTitularInput() {
+        return txtTitular.getText().trim();
+    }
+
+    public String getVencimientoInput() {
+        return txtVencimiento.getText().trim();
+    }
+
+    public String getCvvInput() {
+        return new String(txtCvv.getPassword()).trim();
+    }
+
+    public void mostrarMensajeExitoso(String mensaje) {
+        JOptionPane.showMessageDialog(this, mensaje, "Operación Exitosa", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public void mostrarError(String mensaje) {
+        JOptionPane.showMessageDialog(this, mensaje, "Error en el Proceso", JOptionPane.ERROR_MESSAGE);
+    }
+
+    public void limpiarFormulario() {
+        comboZonas.setSelectedIndex(0);
+        txtCantidad.setText("");
+        txtNumTarjeta.setText("");
+        txtTitular.setText("");
+        txtVencimiento.setText("");
+        txtCvv.setText("");
     }
 }
